@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { afterNextRender, Component, signal } from '@angular/core';
 import type { Coord } from '../../model/model';
 import { NgClass } from '@angular/common';
 import { IsSnakePipe } from '../../pipes/is-snake-pipe';
@@ -10,7 +10,7 @@ import { IsFoodPipe } from '../../pipes/is-food-pipe';
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
-export class Board implements OnInit {
+export class Board {
   snake = signal<Coord[]>([{ x: 9, y: 9 }]);
   food = signal<Coord>({ x: 19, y: 0 });
   direction = signal({ x: 0, y: 1 });
@@ -35,11 +35,11 @@ export class Board implements OnInit {
       }
       return board;
     });
-  }
 
-  ngOnInit(): void {
-    window.addEventListener('keydown', this.onKeyDown.bind(this));
-    this.startGame();
+    afterNextRender(() => {
+      window.addEventListener('keydown', this.onKeyDown.bind(this));
+      this.startGame();
+    });
   }
 
   startGame() {
