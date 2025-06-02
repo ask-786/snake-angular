@@ -1,0 +1,18 @@
+<div class="h-screen w-screen grid grid-cols-20">
+  @for (row of board(); track row; let y = $index) {
+    @for (col of row; track col; let x = $index) {
+      <div
+        [ngClass]="{
+          'bg-red-500': (snake() | isSnake: x : y) && gameStatus() === 'over',
+          '!bg-slate-300':
+            ((snake() | isSnake: x : y) ||
+            (food() | isFood:  x : y)) &&
+            gameStatus() === 'paused',
+          'bg-green-500': snake() | isSnake:  x : y,
+          'bg-orange-500': food() | isFood:  x : y,
+        }"
+        class="h-full w-full"
+      ></div>
+    }
+  }
+</div>
